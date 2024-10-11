@@ -5,26 +5,43 @@ const USER_SIGNUP_REST_API_URL = 'http://localhost:8080/auth/signup'
 const USER_SIGNIN_REST_API_URL = 'http://localhost:8080/auth/signin'
 const USER_GETUSERBYID_REST_API_URL = 'http://localhost:8080/user/ricercaUser'
 const USER_UPDATE_REST_API_URL = 'http://localhost:8080/auth/updateUser'
+
 class UserServiceFE {
 
-    getAllUser() {
-        return axios.get(USER_BASE_REST_API_URL)
+    getAllUser(token) {
+        return axios.get(USER_BASE_REST_API_URL, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
     }
 
-    getUserById(userId) {
-        return axios.get(USER_GETUSERBYID_REST_API_URL + '/' + userId)
+    getUserById(userId, token) {
+        return axios.get(`${USER_GETUSERBYID_REST_API_URL}/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
     }
 
-    createUser(user) {
-        return axios.post(USER_SIGNUP_REST_API_URL, user)
+    createUser(user, token) {
+        return axios.post(USER_SIGNUP_REST_API_URL, user, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
     }
 
     logIn(user) {
         return axios.post(USER_SIGNIN_REST_API_URL, user)
     }
 
-    updateUser(user) {
-        return axios.patch(USER_UPDATE_REST_API_URL, user)
+    updateUser(user, token) {
+        return axios.patch(USER_UPDATE_REST_API_URL, user, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
     }
 
 }

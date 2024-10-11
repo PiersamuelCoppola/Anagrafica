@@ -1,13 +1,10 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../context/AuthContext';
+import { Navigate } from 'react-router-dom';
 
-const PrivateRoute = () => {
+const PrivateRoute = ({ children }) => {
     const { isAuthenticated } = useAuth();
 
-    // Se l'utente è autenticato, renderizza il componente figlio
-    // altrimenti, reindirizza alla pagina di login
-    return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+    return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

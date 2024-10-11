@@ -1,17 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import UserServiceFE from '../services/UserServiceFE'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../context/AuthContext';
 const ListUserComponent = () => {
 
+    const { isAuthenticated } = useAuth();
+    const navigate = useNavigate();
     const [user, setUser] = useState([])
+
+    useEffect(() => {
+        console.log(isAuthenticated)
+        // Se l'utente non è autenticato, reindirizza alla pagina di login
+        if (!isAuthenticated) {
+            navigate('/login');
+            return;
+        }
+        // Carica gli utenti solo se l'utente è autenticato
+        loadUsers();
+    }, [isAuthenticated, navigate]);
 
     //effetto da renderizzare quando si renderizza la pagina
     useEffect(() => {
+        const token = sessionStorage.getItem("ACCESSToken");
         //chiamata al service per eseguire la GetAllUser
-        UserServiceFE.getAllUser().then(response => {
+        UserServiceFE.getAllUser(token).then(response => {
             setUser(response.data)
             console.log(response.data)
         }).catch(error => {
@@ -20,30 +35,36 @@ const ListUserComponent = () => {
 
     }, [])
 
-    //effetto da renderizzare quando si renderizza la pagina
-    useEffect(() => {
-        loadUsers()
-    }, [/*parametro*/])
-
     //funzione definita per ricaricare in automatico la pagina quando viene effettuata la cancellazione
     const loadUsers = async () => {
-        const result = await axios.get("http://localhost:8080/user/getAllUser")
-        //console.log(result.data); stampa i dati recuperati dal backend sulla console del browser
-        setUser(result.data); //setto la variabile users = ai dati recuperati dal backend
+        try {
+            const token = sessionStorage.getItem("ACCESSToken");
+            if (token) {
+                const result = await axios.get("http://localhost:8080/user/getAllUser", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setUser(result.data);
+            } else {
+                toast.error("Token non presente, operazione non eseguibile");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Errore durante il caricamento degli utenti");
+        }
     }
 
     //cancellazione di un user
     const deleteUser = async (id) => {
-        let AuthStr="";
+        let AuthStr = "";
         let token = sessionStorage.getItem("ACCESSToken");
-        if(token===null){
+        if (!token) {
             //visualizzo il toast se ad esempio cancello il token dalla sessione e voglio eseguire la delete
             toast.error("Token non presente, operazione non eseguibile");
-        }else{
+        } else {
             AuthStr = 'Bearer '.concat(token);
         }
         try {
-            await axios.delete(`http://localhost:8080/user/cancellaUser/${id}`, {headers: { Authorization: AuthStr}})
+            await axios.delete(`http://localhost:8080/user/cancellaUser/${id}`, { headers: { Authorization: AuthStr } })
             loadUsers();//funzione definita sopra
         } catch (error) {
             if (error.response.status === 403) {

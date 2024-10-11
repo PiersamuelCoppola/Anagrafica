@@ -1,65 +1,73 @@
 import React, { useState, useEffect } from 'react'
 import UserServiceFE from '../services/UserServiceFE'
 import { useNavigate, useParams, Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 const AddUserComponent = () => {
+
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   const [identificativo, setIdentificativo] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('')
-  const navigate = useNavigate();
-  const { id } = useParams();
+  
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate]);
 
   //Salvataggio dell'utente
-  const saveUser = (e) => {
+  const saveUser = async (e) => {
     e.preventDefault();
-
     const user = { email, password, role }
-    UserServiceFE.createUser(user).then((response) => {
-
-      console.log(response.data)
-
-      navigate('/home');
-
-    }).catch(error => {
-      console.log(error)
-    })
-  }
+    try {
+      const token = sessionStorage.getItem("ACCESSToken");
+      if (token) {
+        await UserServiceFE.createUser(user, token);
+        navigate('/home');
+      } else {
+        console.log("Token non presente");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //Update dell'utente
-  const update = (e) => {
+  const update = async (e) => {
     e.preventDefault();
-
-    const user = { identificativo, email, password, role }
-    UserServiceFE.updateUser(user).then((response) => {
-
-      console.log(response.data)
-
-      navigate('/home');
-
-    }).catch(error => {
-      console.log(error)
-    })
-  }
+    const user = { identificativo, email, password, role };
+    try {
+      const token = sessionStorage.getItem("ACCESSToken");
+      if (token) {
+        await UserServiceFE.updateUser(user, token);
+        navigate('/home');
+      } else {
+        console.log("Token non presente");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //realizzazione della funzione per il recupero dei dati di un utente per visualizzarli nel form di updateUser
   useEffect(() => {
-
-    UserServiceFE.getUserById(id).then((response) => {
-      setIdentificativo(response.data.id)
-      setEmail(response.data.email)
-      console.log(response.data.email)
-      setPassword(response.data.password)
-      setRole(response.data.role)
-    }).catch(error => {
-      console.log(error)
-    })
-
-    return () => {
-
+    if (id) {
+      const token = sessionStorage.getItem("ACCESSToken");
+      UserServiceFE.getUserById(id, token).then((response) => {
+        setIdentificativo(response.data.id);
+        setEmail(response.data.email);
+        setPassword(response.data.password);
+        setRole(response.data.role);
+      }).catch(error => {
+        console.log(error);
+      });
     }
-  }, [])
+  }, [id]);
 
   //modifica del titolo del form in base ad un controllo delle presenza o meno di un id
   const title = () => {
@@ -76,11 +84,9 @@ const AddUserComponent = () => {
     if (id) {
       console.log(id)
       return <button className="btn btn-succes btn-primary" onClick={(e) => update(e)}> Update </button>
-
     }
     else {
       return <button className="btn btn-succes btn-primary" onClick={(e) => saveUser(e)}> Add </button>
-
     }
   }
 

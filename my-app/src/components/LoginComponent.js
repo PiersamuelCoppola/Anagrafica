@@ -9,22 +9,19 @@ const LoginComponent = () => {
     const [role, setRole] = useState('')
     const navigate = useNavigate();
 
-    const { authUser,
-        setAuthUser,
-        isLoggedIn,
-        setIsLoggedIn } = useAuth()
-
-    const login = async (e) => {
+    const { setAuthUser, setIsAuthenticated } = useAuth();
+    
+    const Login = async (e) => {
         e.preventDefault();
-        setIsLoggedIn(true)
         const user = { email, password, role }
-        setAuthUser(user)
         try {
             // Esegui la chiamata al servizio di login
             const response = await UserServiceFE.logIn(user);
-
             // Prendi il token dalla risposta del backend
             const token = response.data["token"];
+            // Imposta l'utente e lo stato di autenticazione
+            setIsAuthenticated(true);
+            setAuthUser(user);
             if (token) {
                 console.log(response.data["token"]);
                 // Salva il token nel localStorage
@@ -32,7 +29,7 @@ const LoginComponent = () => {
                 // Con sessionStorage il token dura solo per la sessione attuale:
                 sessionStorage.setItem('ACCESSToken', token);
                 sessionStorage.setItem('role', response.data["role"]);
-                setRole(response.data["role"])
+                setRole(response.data["role"]);
                 // Reindirizza alla home page o alla pagina desiderata
                 navigate('/home');
             } else {
@@ -43,15 +40,6 @@ const LoginComponent = () => {
             console.error("Errore durante il login:", error);
         }
     }
-
-    const logOut = (e) => {
-        e.preventDefault()
-        setIsLoggedIn(false)
-        setAuthUser(null)
-        navigate('/login');
-
-    }
-
 
     return (
         <div>
@@ -88,11 +76,9 @@ const LoginComponent = () => {
                                     >
                                     </input>
                                 </div>
-                                {
-                                    isLoggedIn
-                                        ? <button className="btn btn-succes btn-primary" onClick={(e) => logOut(e)}> Log Out </button>
-                                        : <button className="btn btn-succes btn-primary" onClick={(e) => login(e)}> Log in </button>
-                                }
+
+                                <button className="btn btn-succes btn-primary" onClick={(e) => Login(e)}> Log in </button>
+
                             </form>
                         </div>
                     </div>
