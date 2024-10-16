@@ -4,23 +4,22 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAuth } from '../context/AuthContext';
+import { useSelector } from 'react-redux';
 const ListUserComponent = () => {
 
-    const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const [user, setUser] = useState([])
-
+    const auth = useSelector((state) => state.auth.isLoggedIn)
     useEffect(() => {
-        console.log(isAuthenticated)
+        console.log(auth)
         // Se l'utente non è autenticato, reindirizza alla pagina di login
-        if (!isAuthenticated) {
+        if (!auth) {
             navigate('/login');
             return;
         }
         // Carica gli utenti solo se l'utente è autenticato
         loadUsers();
-    }, [isAuthenticated, navigate]);
+    }, [auth, navigate]);
 
     //effetto da renderizzare quando si renderizza la pagina
     useEffect(() => {

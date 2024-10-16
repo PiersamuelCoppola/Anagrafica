@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import UserServiceFE from '../services/UserServiceFE'
 import { useNavigate, useParams, Link } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
-
+import { useSelector } from 'react-redux'
 const AddUserComponent = () => {
 
-  const { isAuthenticated } = useAuth();
+  const auth = useSelector((state) => state.auth.isLoggedIn)
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -15,10 +14,10 @@ const AddUserComponent = () => {
   const [role, setRole] = useState('')
   
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!auth) {
       navigate('/login');
     }
-  }, [isAuthenticated, navigate]);
+  }, [auth, navigate]);
 
   //Salvataggio dell'utente
   const saveUser = async (e) => {

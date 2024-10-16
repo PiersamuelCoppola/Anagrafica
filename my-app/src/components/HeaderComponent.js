@@ -1,21 +1,22 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useSelector, useDispatch } from 'react-redux'
+import { logout } from '../redux/authSlice'
 
 const HeaderComponent = () => {
 
     const navigate = useNavigate();
-
-    const { setAuthUser, isAuthenticated, setIsAuthenticated } = useAuth();
-    
-    useEffect(() => {
-        console.log("HEADER isAuthenticated: ", isAuthenticated);
-    }, [isAuthenticated]);
+    const dispatch = useDispatch();
+    const { setAuthUser } = useAuth();
+    const auth = useSelector((state) => state.auth.isLoggedIn)
 
     const logOut = (e) => {
         e.preventDefault()
-        setIsAuthenticated(false)
+        dispatch(logout())
         setAuthUser(null)
+        sessionStorage.removeItem("ACCESSToken")
+        sessionStorage.removeItem("role")
         navigate('/');
     }
 
@@ -30,7 +31,7 @@ const HeaderComponent = () => {
             <div className="container-fluid">
                 <span style={{ color: "red" }} className="navbar-brand mb-0 h1">User Management Application</span>
                 {
-                    isAuthenticated
+                    auth
                         ? (<button className="btn btn-succes btn-primary" onClick={(e) => logOut(e)}> Log Out </button>)
                         : (<button className="btn btn-succes btn-primary" onClick={(e) => logIn(e)}> Log in </button>)
                 }
