@@ -79,6 +79,7 @@ const ListUserComponent = () => {
     return (
         <div className="container-fluid">
             <div>
+                <br/>
                 <h2 className="text-left text-dark"> User List </h2>
                 <Link to="/add-user" className="btn btn-right btn-success" style={{ margin: "1%", float: "right" }}> Add User </Link>
             </div>
