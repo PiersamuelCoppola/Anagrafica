@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../redux/authSlice'
 
@@ -8,15 +6,11 @@ const HeaderComponent = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { setAuthUser } = useAuth();
     const auth = useSelector((state) => state.auth.isLoggedIn)
 
     const logOut = (e) => {
         e.preventDefault()
         dispatch(logout())
-        setAuthUser(null)
-        sessionStorage.removeItem("ACCESSToken")
-        sessionStorage.removeItem("role")
         navigate('/');
     }
 

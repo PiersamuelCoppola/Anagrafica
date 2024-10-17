@@ -46,7 +46,6 @@ const ListUserComponent = () => {
     }
 
     useEffect(() => {
-        console.log(auth)
         // Se l'utente non è autenticato, reindirizza alla pagina di login
         if (!auth) {
             navigate('/login');

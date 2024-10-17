@@ -6,11 +6,9 @@ import ListUserComponent from './components/ListUserComponent';
 import FooterComponent from './components/FooterComponent';
 import AddUserComponent from './components/AddUserComponent';
 import LoginComponent from './components/LoginComponent';
-import { AuthProvider } from './context/AuthContext';
-import PrivateRoute from './context/PrivateRoute';
+import PrivateRoute from './redux/PrivateRoute';
 function App() {
   return (
-    <AuthProvider>
       <Router>
         <HeaderComponent />
         <Routes>
@@ -23,7 +21,6 @@ function App() {
         </Routes>
         <FooterComponent />
       </Router>
-    </AuthProvider >
   );
 }
 
