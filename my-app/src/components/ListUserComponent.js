@@ -78,11 +78,10 @@ const ListUserComponent = () => {
     //generazione tabella contenente gli user con relativi pulsanti linkati per l'add, l'update e la delete
     return (
         <div className="container-fluid">
-            <br /> <br />
             <div>
-                <h2 className="text-center text-dark"> User List </h2>
+                <h2 className="text-left text-dark"> User List </h2>
+                <Link to="/add-user" className="btn btn-right btn-success" style={{ margin: "1%", float: "right" }}> Add User </Link>
             </div>
-            <Link to="/add-user" className="btn btn-success" style={{ margin: "1%" }}> Add User </Link>
             <table className="table table-bordered table-striped table-dark">
                 <thead>
                     <tr>
