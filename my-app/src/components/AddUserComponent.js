@@ -4,7 +4,6 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 const AddUserComponent = () => {
 
-  const auth = useSelector((state) => state.auth.isLoggedIn)
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -12,7 +11,10 @@ const AddUserComponent = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('')
-  
+
+  const auth = useSelector((state) => state.auth.isLoggedIn)
+  const token = useSelector((state) => state.auth.token)
+
   useEffect(() => {
     if (!auth) {
       navigate('/login');
@@ -24,7 +26,6 @@ const AddUserComponent = () => {
     e.preventDefault();
     const user = { email, password, role }
     try {
-      const token = sessionStorage.getItem("ACCESSToken");
       if (token) {
         await UserServiceFE.createUser(user, token);
         navigate('/home');
@@ -41,7 +42,6 @@ const AddUserComponent = () => {
     e.preventDefault();
     const user = { identificativo, email, password, role };
     try {
-      const token = sessionStorage.getItem("ACCESSToken");
       if (token) {
         await UserServiceFE.updateUser(user, token);
         navigate('/home');
@@ -56,7 +56,6 @@ const AddUserComponent = () => {
   //realizzazione della funzione per il recupero dei dati di un utente per visualizzarli nel form di updateUser
   useEffect(() => {
     if (id) {
-      const token = sessionStorage.getItem("ACCESSToken");
       UserServiceFE.getUserById(id, token).then((response) => {
         setIdentificativo(response.data.id);
         setEmail(response.data.email);
@@ -66,7 +65,7 @@ const AddUserComponent = () => {
         console.log(error);
       });
     }
-  }, [id]);
+  }, [token, id]);
 
   //modifica del titolo del form in base ad un controllo delle presenza o meno di un id
   const title = () => {

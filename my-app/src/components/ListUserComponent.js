@@ -5,25 +5,19 @@ import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
+
 const ListUserComponent = () => {
 
     const navigate = useNavigate();
     const [user, setUser] = useState([])
     const auth = useSelector((state) => state.auth.isLoggedIn)
-    useEffect(() => {
-        console.log(auth)
-        // Se l'utente non è autenticato, reindirizza alla pagina di login
-        if (!auth) {
-            navigate('/login');
-            return;
-        }
-        // Carica gli utenti solo se l'utente è autenticato
-        loadUsers();
-    }, [auth, navigate]);
+    const token = useSelector((state) => state.auth.token)
+    const userStore = useSelector((state) => state.auth.user)
+
+
 
     //effetto da renderizzare quando si renderizza la pagina
     useEffect(() => {
-        const token = sessionStorage.getItem("ACCESSToken");
         //chiamata al service per eseguire la GetAllUser
         UserServiceFE.getAllUser(token).then(response => {
             setUser(response.data)
@@ -32,12 +26,11 @@ const ListUserComponent = () => {
             console.log(error);
         })
 
-    }, [])
+    }, [token])
 
     //funzione definita per ricaricare in automatico la pagina quando viene effettuata la cancellazione
     const loadUsers = async () => {
         try {
-            const token = sessionStorage.getItem("ACCESSToken");
             if (token) {
                 const result = await axios.get("http://localhost:8080/user/getAllUser", {
                     headers: { Authorization: `Bearer ${token}` }
@@ -52,10 +45,20 @@ const ListUserComponent = () => {
         }
     }
 
+    useEffect(() => {
+        console.log(auth)
+        // Se l'utente non è autenticato, reindirizza alla pagina di login
+        if (!auth) {
+            navigate('/login');
+            return;
+        }
+        // Carica gli utenti solo se l'utente è autenticato
+        loadUsers();
+    }, [auth, navigate, loadUsers]);
+
     //cancellazione di un user
     const deleteUser = async (id) => {
         let AuthStr = "";
-        let token = sessionStorage.getItem("ACCESSToken");
         if (!token) {
             //visualizzo il toast se ad esempio cancello il token dalla sessione e voglio eseguire la delete
             toast.error("Token non presente, operazione non eseguibile");
@@ -104,9 +107,10 @@ const ListUserComponent = () => {
                                         <Link className="btn btn-primary" to={`/aggiornaUtente/${user.id}`}> Update </Link>
 
                                         {/* Condizione per mostrare il bottone Cancel solo agli admin */}
-                                        {sessionStorage.getItem("role") === 'ADMIN' && (
-                                            <Link className="btn btn-danger" onClick={() => deleteUser(user.id)}> Delete </Link>
-                                        )}
+                                        {
+                                            userStore.role === 'ADMIN' && (
+                                                <Link className="btn btn-danger" onClick={() => deleteUser(user.id)}> Delete </Link>
+                                            )}
                                         <ToastContainer />
                                     </td>
                                 </tr>
