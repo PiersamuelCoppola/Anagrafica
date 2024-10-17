@@ -23,23 +23,29 @@ const LoginComponent = () => {
 
     const Login = async (e) => {
         e.preventDefault();
-        const user = { email, password, role }
+        const user = { email, password }
+        const userSenzaPassword = { email, role }
         try {
             // Esegui la chiamata al servizio di login
             const response = await UserServiceFE.logIn(user);
-            // Prendi il token dalla risposta del backend
-            console.log(response.data["token"]);
-            // Imposta l'utente e lo stato di autenticazione
-            user.role=response.data["role"];
-            dispatch(login(user))
-            dispatch(getToken(response.data["token"]))
-            if (token) {
-                // Reindirizza alla home page o alla pagina desiderata
-                navigate('/home');
-            } else {
-                console.error("Token non trovato nella risposta");
+            console.log(response.data["statusCode"])
+            if (response.data["statusCode"] !== 500) {
+                // Prendi il token dalla risposta del backend
+                console.log(response.data["token"]);
+                // Imposta l'utente e lo stato di autenticazione
+                userSenzaPassword.role = response.data["role"];
+                dispatch(login(userSenzaPassword))
+                dispatch(getToken(response.data["token"]))
+                if (token) {
+                    // Reindirizza alla home page o alla pagina desiderata
+                    navigate('/home');
+                } else {
+                    console.error("Token non trovato nella risposta");
+                }
             }
-
+            else{
+                window.location.reload();
+            }
         } catch (error) {
             console.error("Errore durante il login:", error);
         }
