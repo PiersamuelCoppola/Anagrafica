@@ -1,0 +1,21 @@
+{
+    "headerComponent": {
+        "title": "User Management Application"
+    },
+    "bottoni": {
+        "login" : "Log In",
+        "logout" : "Log Out",
+        "adduser" : "Add User",
+        "update" : "Update User",
+        "delete" : "Delete",
+        "cancel" : "Cancel"
+    },
+    "listUserComponent": {
+        "userList": "User List",
+        "role": "Role",
+        "actions": "Actions" 
+    }, 
+    "footerComponent": {
+        "rights": "All Rights Deserved 2024@Piersamuel Coppola"
+    }
+}

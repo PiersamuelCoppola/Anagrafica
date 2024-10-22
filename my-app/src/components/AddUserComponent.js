@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import UserServiceFE from '../services/UserServiceFE'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { useTranslation } from "react-i18next";
+
 const AddUserComponent = () => {
 
   const navigate = useNavigate();
@@ -14,6 +16,8 @@ const AddUserComponent = () => {
 
   const auth = useSelector((state) => state.auth.isLoggedIn)
   const token = useSelector((state) => state.auth.token)
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!auth) {
@@ -71,20 +75,20 @@ const AddUserComponent = () => {
   const title = () => {
     if (id) {
       console.log(id)
-      return <h2 className="text-center"> Update User </h2>
+      return <h2 className="text-center"> {t("bottoni.update")} </h2>
     }
     else {
-      return <h2 className="text-center"> Add User </h2>
+      return <h2 className="text-center"> {t("bottoni.adduser")} </h2>
     }
   }
   //realizzazione di un bottone per l'update o per l'add do un user in base al controllo dell'id come prima per il titolo
   const updateORadd = () => {
     if (id) {
       console.log(id)
-      return <button className="btn btn-succes btn-primary" onClick={(e) => update(e)}> Update </button>
+      return <button className="btn btn-succes btn-primary" onClick={(e) => update(e)}> {t("bottoni.update")} </button>
     }
     else {
-      return <button className="btn btn-succes btn-primary" onClick={(e) => saveUser(e)}> Add </button>
+      return <button className="btn btn-succes btn-primary" onClick={(e) => saveUser(e)}> {t("bottoni.adduser")} </button>
     }
   }
 
@@ -127,7 +131,7 @@ const AddUserComponent = () => {
                 </div>
 
                 <div className="form-group mb-2">
-                  <label className="form-label"> Role :</label>
+                  <label className="form-label"> {t("listUserComponent.role")} :</label>
                   <input
                     type="text"
                     placeholder="Enter role"
@@ -141,7 +145,7 @@ const AddUserComponent = () => {
                 {
                   updateORadd()
                 }
-                  <Link to="/home" className="btn btn-danger"> Cancel </Link>
+                  <Link to="/home" className="btn btn-danger"> {t("bottoni.cancel")} </Link>
               </form>
             </div>
           </div>

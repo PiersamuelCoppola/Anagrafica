@@ -1,0 +1,21 @@
+{
+    "headerComponent": {
+        "title": "Applicazione gestione utenti"
+    },
+    "bottoni": {
+        "login" : "Accedi",
+        "logout" : "Disconnettiti",
+        "adduser" : "Aggiungi Utente",
+        "update" : "Aggiorna Utente",
+        "delete" : "Cancella",
+        "cancel" : "Annulla"
+    },
+    "listUserComponent": {
+        "userList": "Lista Utenti",
+        "role": "Ruolo",
+        "actions": "Azioni" 
+    }, 
+    "footerComponent": {
+        "rights": "Tutti i diritti sono riservati 2024@Piersamuel Coppola"
+    }
+}

@@ -5,6 +5,7 @@ import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
+import { useTranslation } from "react-i18next";
 
 const ListUserComponent = () => {
 
@@ -13,6 +14,7 @@ const ListUserComponent = () => {
     const auth = useSelector((state) => state.auth.isLoggedIn)
     const token = useSelector((state) => state.auth.token)
     const userStore = useSelector((state) => state.auth.user)
+    const { t } = useTranslation();
 
 
 
@@ -80,8 +82,8 @@ const ListUserComponent = () => {
         <div className="container-fluid">
             <div>
                 <br/>
-                <h2 className="text-left text-dark"> User List </h2>
-                <Link to="/add-user" className="btn btn-right btn-success" style={{ margin: "1%", float: "right" }}> Add User </Link>
+                <h2 className="text-left text-dark"> {t("listUserComponent.userList")} </h2>
+                <Link to="/add-user" className="btn btn-right btn-success" style={{ margin: "1%", float: "right" }}> {t("bottoni.adduser")} </Link>
             </div>
             <table className="table table-bordered table-striped table-dark">
                 <thead>
@@ -89,8 +91,8 @@ const ListUserComponent = () => {
                         <th> Id </th>
                         <th> Email </th>
                         <th> Password </th>
-                        <th> Role </th>
-                        <th> Actions </th>
+                        <th> {t("listUserComponent.role")} </th>
+                        <th> {t("listUserComponent.actions")} </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -103,12 +105,12 @@ const ListUserComponent = () => {
                                     <td>{user.password}</td>
                                     <td>{user.role}</td>
                                     <td>
-                                        <Link className="btn btn-primary" to={`/aggiornaUtente/${user.id}`}> Update </Link>
+                                        <Link className="btn btn-primary" to={`/aggiornaUtente/${user.id}`}> {t("bottoni.update")} </Link>
 
                                         {/* Condizione per mostrare il bottone Cancel solo agli admin */}
                                         {
                                             userStore.role === 'ADMIN' && (
-                                                <Link className="btn btn-danger" onClick={() => deleteUser(user.id)}> Delete </Link>
+                                                <Link className="btn btn-danger" onClick={() => deleteUser(user.id)}> {t("bottoni.delete")} </Link>
                                             )}
                                         <ToastContainer />
                                     </td>
