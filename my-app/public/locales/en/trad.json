@@ -3,6 +3,7 @@
         "title": "User Management Application"
     },
     "bottoni": {
+        "register" : "Register",
         "login" : "Log In",
         "logout" : "Log Out",
         "adduser" : "Add User",
@@ -17,5 +18,8 @@
     }, 
     "footerComponent": {
         "rights": "All Rights Deserved 2024@Piersamuel Coppola"
+    },
+    "signUpComponent": {
+        "registrationUser" : "Registration"
     }
 }

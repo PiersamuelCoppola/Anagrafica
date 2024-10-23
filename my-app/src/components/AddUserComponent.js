@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import UserServiceFE from '../services/UserServiceFE'
-import { useNavigate, useParams, Link } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useTranslation } from "react-i18next";
+import Button from '@mui/material/Button';
 
 const AddUserComponent = () => {
 
@@ -85,10 +86,10 @@ const AddUserComponent = () => {
   const updateORadd = () => {
     if (id) {
       console.log(id)
-      return <button className="btn btn-succes btn-primary" onClick={(e) => update(e)}> {t("bottoni.update")} </button>
+      return <Button variant="contained" color="primary" style={{ borderColor: "blue", boxShadow: "blue"}} onClick={(e) => update(e)}> {t("bottoni.update")} </Button>
     }
     else {
-      return <button className="btn btn-succes btn-primary" onClick={(e) => saveUser(e)}> {t("bottoni.adduser")} </button>
+      return <Button variant="contained" color="primary" style={{ borderColor: "blue", boxShadow: "blue" }} onClick={(e) => saveUser(e)}> {t("bottoni.adduser")} </Button>
     }
   }
 
@@ -145,7 +146,7 @@ const AddUserComponent = () => {
                 {
                   updateORadd()
                 }
-                  <Link to="/home" className="btn btn-danger"> {t("bottoni.cancel")} </Link>
+                  <Button variant="contained" color="error" style={{ borderColor: "red", boxShadow: "red", margin: "10px"}} onClick={(e) => navigate("/home")}> {t("bottoni.cancel")} </Button>
               </form>
             </div>
           </div>

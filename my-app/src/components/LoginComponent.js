@@ -7,6 +7,7 @@ import { login, getToken } from '../redux/authSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from "react-i18next";
+import Button from '@mui/material/Button';
 
 const LoginComponent = () => {
     const navigate = useNavigate();
@@ -81,7 +82,7 @@ const LoginComponent = () => {
                                     {errors.password && <span style={{ color: "red" }}>{errors.password.message}</span>}
                                 </div>
 
-                                <button className="btn btn-primary" type="submit"> {t("bottoni.login")} </button>
+                                 <Button variant="contained" color="success" style={{ borderColor: "green", float: "right" }} type='submit'> {t("bottoni.login")} </Button>
                                 <ToastContainer />
                             </form>
                         </div>

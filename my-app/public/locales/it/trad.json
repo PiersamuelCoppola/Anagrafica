@@ -3,6 +3,7 @@
         "title": "Applicazione gestione utenti"
     },
     "bottoni": {
+        "register" : "Registrati",
         "login" : "Accedi",
         "logout" : "Disconnettiti",
         "adduser" : "Aggiungi Utente",
@@ -17,5 +18,8 @@
     }, 
     "footerComponent": {
         "rights": "Tutti i diritti sono riservati 2024@Piersamuel Coppola"
+    },
+    "signUpComponent": {
+        "registrationUser" : "Registrazione Utente"
     }
 }
